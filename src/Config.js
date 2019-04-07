@@ -17,6 +17,7 @@ const TAG = 'Config';
  * @property {{enabled: boolean, port: number, sslCertPath: string, sslKeyPath: string, mySqlPsw: string, mySqlHost: string}} poolServer
  * @property {{enabled: boolean, mySqlPsw: string, mySqlHost: string}} poolService
  * @property {{enabled: boolean, mySqlPsw: string, mySqlHost: string}} poolPayout
+ * @property {{enabled: boolean, mySqlPsw: string, mySqlHost: string}} poolValidate
  * @property {{seed: string, address: string}} wallet
  * @property {{level: string, tags: object}} log
  * @property {Array.<{host: string, port: number, publicKey: string}>} seedPeers
@@ -67,6 +68,11 @@ const DEFAULT_CONFIG = /** @type {Config} */ {
         mySqlHost: null
     },
     poolPayout: {
+        enabled: false,
+        mySqlPsw: null,
+        mySqlHost: null
+    },
+    poolValidate: {
         enabled: false,
         mySqlPsw: null,
         mySqlHost: null
@@ -137,6 +143,13 @@ const CONFIG_TYPES = {
         }
     },
     poolPayout: {
+        type: 'object', sub: {
+            enabled: 'boolean',
+            mySqlPsw: 'string',
+            mySqlHost: 'string'
+        }
+    },
+    poolValidate: {
         type: 'object', sub: {
             enabled: 'boolean',
             mySqlPsw: 'string',

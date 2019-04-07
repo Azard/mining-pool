@@ -5,6 +5,7 @@ const config = require('./src/Config.js')(argv.config);
 const PoolServer = require('./src/PoolServer.js');
 const PoolService = require('./src/PoolService.js');
 const PoolPayout = require('./src/PoolPayout.js');
+const PoolValidate = require('./src/PoolValidate.js');
 const MetricsServer = require('./src/MetricsServer.js');
 
 const START = Date.now();
@@ -102,6 +103,12 @@ for (const seedPeer of config.seedPeers) {
         if (!wallet) Nimiq.Log.i(TAG, 'Wallet for pool address not found, will fallback to default wallet for payouts.');
         const poolPayout = new PoolPayout($.consensus, wallet || $.wallet, config.pool, config.poolPayout.mySqlPsw, config.poolPayout.mySqlHost);
         poolPayout.start();
+    }
+    if (config.poolValidate.enabled) {
+        const wallet = await $.walletStore.get(Nimiq.Address.fromString(config.pool.address));
+        if (!wallet) Nimiq.Log.i(TAG, 'Wallet for pool address not found, will fallback to default wallet for payouts.');
+        const poolValidate = new PoolValidate($.consensus, wallet || $.wallet, config.pool, config.poolPayout.mySqlPsw, config.poolPayout.mySqlHost);
+        poolValidate.start();
     }
 
     const addresses = await $.walletStore.list();
